@@ -1,0 +1,53 @@
+import boto3
+import os
+import logging
+
+class S3Client:
+    s3_client = None
+    s3_resource = None
+
+    def __init__(self, region_name='us-east-1'):
+        """
+        This Class gets AWS credentials from environment variables and creates a connection with S3.
+        It raises an exception when environment variables are not set.
+        """
+        # Singleton pattern - only initialize if not already initialized
+        if S3Client.s3_resource is None or S3Client.s3_client is None:
+            access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+            secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+            # Check if credentials are set in environment variables
+            if access_key_id is None:
+                raise Exception("Environment variable 'AWS_ACCESS_KEY_ID' is not set.")
+            if secret_access_key is None:
+                raise Exception("Environment variable 'AWS_SECRET_ACCESS_KEY' is not set.")
+
+            # Create S3 resource and client
+            S3Client.s3_resource = boto3.resource('s3',
+                                                  aws_access_key_id=access_key_id,
+                                                  aws_secret_access_key=secret_access_key,
+                                                  region_name=region_name)
+            S3Client.s3_client = boto3.client('s3',
+                                              aws_access_key_id=access_key_id,
+                                              aws_secret_access_key=secret_access_key,
+                                              region_name=region_name)
+
+        # Instance variables referring to the class-level clients/resources
+        self.s3_resource = S3Client.s3_resource
+        self.s3_client = S3Client.s3_client
+
+    def download_file(self, bucket_name, s3_file_key, local_file_name):
+        """
+        Downloads a file from the specified S3 bucket to the local machine.
+        """
+        # Create the directory if it doesn't exist
+        os.makedirs(os.path.dirname(local_file_name), exist_ok=True)
+
+        try:
+            self.s3_client.download_file(bucket_name, s3_file_key, local_file_name)
+            logging.info(f"File '{local_file_name}' downloaded successfully from '{bucket_name}/{s3_file_key}'")
+        except boto3.exceptions.S3UploadFailedError as e:
+            raise Exception(f"Error downloading file from S3: {str(e)}")
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred: {str(e)}")
+
