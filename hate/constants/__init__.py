@@ -19,3 +19,14 @@ Data Ingestion related constants
 DATA_INGESTION_ARTIFACTS_DIR = "DataIngestionArtifacts"
 DATA_INGESTION_IMBALANCE_DATA_DIR = "imbalanced_data.csv"
 DATA_INGESTION_RAW_DATA_DIR  = "raw_data.csv"
+
+
+""""
+Data Validation related constant
+"""
+
+DATA_VALIDATION_ARTIFACTS_DIR = "DataValidationArtifacts"
+DATA_VALIDATION_STATUS_DIR = "status.txt"
+DATA_VALIDATION_ALL_REQUIRED_FILES = ['imbalanced_data.csv', 'raw_data.csv']
+DATA_VALIDATION_ALL_IMBALANCE_REQUIRED_COLUMNS = ['id', 'label', 'tweet']
+DATA_VALIDATION_ALL_RAW_REQUIRED_COLUMNS = ['Unnamed: 0', 'count', 'hate_speech', 'offensive_language', 'neither', 'class', 'tweet']
