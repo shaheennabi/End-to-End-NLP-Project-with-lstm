@@ -26,3 +26,12 @@ class TrainPipeline:
         except Exception as e: 
             raise HateException(e, sys)
         
+
+    def run_pipeline(self):
+        logging.info("Entered the run_pipeline method TrainPipeline class")
+        try: 
+            data_ingestion_artifact = self.start_data_ingestion()
+
+            logging.info("Exited the run_pipeline method of TrainPipeline class")
+        except Exception as e: 
+            raise HateException(e,sys)
