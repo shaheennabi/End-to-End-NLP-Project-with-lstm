@@ -20,3 +20,15 @@ class DataIngestionConfig:
 
 
 
+@dataclass
+class DataValidationConfig:
+    def __init__(self):
+        self.DATA_VALIDATION_ARTIFACTS_DIR: str = os.path.join(ARTIFACTS_DIR, DATA_VALIDATION_ARTIFACTS_DIR)
+        self.STATUS_FILE_DIR: str = os.path.join(self.DATA_VALIDATION_ARTIFACTS_DIR, DATA_VALIDATION_STATUS_DIR)
+        self.REQUIRED_FILES_LIST = DATA_VALIDATION_ALL_REQUIRED_FILES
+        self.IMBALANCE_COLUMNS_LIST = DATA_VALIDATION_ALL_IMBALANCE_REQUIRED_COLUMNS
+        self.RAW_COLUMNS_LIST = DATA_VALIDATION_ALL_RAW_REQUIRED_COLUMNS
+
+
+        
+    
