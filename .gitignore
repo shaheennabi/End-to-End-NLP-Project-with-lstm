@@ -164,3 +164,4 @@ cython_debug/
 
 s3_downloads/*
 model.h5
+artifacts/*
