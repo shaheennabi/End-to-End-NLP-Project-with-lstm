@@ -23,9 +23,10 @@ class DataIngestion:
         logging.info("Entered the get_data_from_s3 of Data Ingestion class")
         try: 
             os.makedirs(self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR, exist_ok=True)
-            self.s3_bucket.download_file(self.data_ingestion_config.BUCKET_NAME, self.data_ingestion_config.ZIP_FILE_NAME, self.data_ingestion_config.DATA_INGESTION_ARTIFACTS_DIR)
+            self.s3_bucket.download_file(self.data_ingestion_config.BUCKET_NAME, self.data_ingestion_config.ZIP_FILE_NAME, self.data_ingestion_config.ZIP_FILE_PATH)
 
-            logging.info("Exited the get_data_from_s3 method of data_ingestion componenet")
+            logging.info("Successfully downloaded the file from S3")
+            logging.info("Exited the get_data_from_s3 method of DataIngestion component")
 
 
         except Exception as e: 
@@ -41,7 +42,7 @@ class DataIngestion:
 
             logging.info("Exited the unzip_and_clean method of Data Ingestion class")
 
-            return self.data_ingestion_config.INGESTED_IMBALANCE_DATA_DIR, self.data_ingestion_config.INGESTED_RAW_DATA_DIR
+            return self.data_ingestion_config.DATA_ARTIFACTS_DIR, self.data_ingestion_config.NEW_DATA_ARTIFACTS_DIR
 
 
         except Exception as e: 
