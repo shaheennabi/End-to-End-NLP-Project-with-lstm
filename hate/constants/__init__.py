@@ -30,3 +30,19 @@ DATA_VALIDATION_STATUS_DIR = "status.txt"
 DATA_VALIDATION_ALL_REQUIRED_FILES = ['imbalanced_data.csv', 'raw_data.csv']
 DATA_VALIDATION_ALL_IMBALANCE_REQUIRED_COLUMNS = ['id', 'label', 'tweet']
 DATA_VALIDATION_ALL_RAW_REQUIRED_COLUMNS = ['Unnamed: 0', 'count', 'hate_speech', 'offensive_language', 'neither', 'class', 'tweet']
+
+
+
+
+"""
+Data Transformation related constant
+"""
+
+DATA_TRANSFORMATION_ARTIFACTS_DIR  = 'DataTransformationArtifacts'
+TRANSFORMED_FILE_NAME = 'final.csv'
+DATA_DIR = 'data'
+ID = 'id'
+AXIS = 1
+INPLACE = True 
+DROP_COLUMNS = ['Unnamed: 0', 'count', 'hate_speech', 'offensive_language', 'neither']
+CLASS  = 'class'
