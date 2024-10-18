@@ -29,4 +29,13 @@ class ModelTrainerArtifact:
     y_test_path: list 
 
 
+@dataclass
+class ModelEvaluationArtifact:
+    is_model_accepted: bool
+
+
+@dataclass
+class ModelPusherArtifact:
+    bucket_name: str
+
 

@@ -51,3 +51,22 @@ class S3Client:
         except Exception as e:
             raise Exception(f"An unexpected error occurred: {str(e)}")
 
+
+    def upload_file(self, file_name, bucket_name, s3_file_key):
+        """
+        Uploads a file from the local machine to the specified S3 bucket.
+        :param file_name: Path to the local file to be uploaded
+        :param bucket_name: Name of the S3 bucket
+        :param s3_file_key: S3 object name (key) where the file will be stored
+        """
+        try:
+            # Check if the file exists
+            if not os.path.isfile(file_name):
+                raise FileNotFoundError(f"File '{file_name}' not found.")
+
+            self.s3_client.upload_file(file_name, bucket_name, s3_file_key)
+            logging.info(f"File '{file_name}' uploaded successfully to '{bucket_name}/{s3_file_key}'")
+        except boto3.exceptions.S3UploadFailedError as e:
+            raise Exception(f"Error uploading file to S3: {str(e)}")
+        except Exception as e:
+            raise Exception(f"An unexpected error occurred: {str(e)}")
