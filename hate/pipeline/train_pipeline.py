@@ -91,9 +91,10 @@ class TrainPipeline:
         logging.info("Entered the start_model_evaluation method of TrainPipeline class")
         try: 
             model_evaluation = ModelEvaluation(
-                data_transformation_artifacts=data_transformation_artifact,
                 model_evaluation_config=self.model_evaluation_config,
-                model_trainer_artifact=model_trainer_artifact  # Corrected the parameter name
+                model_trainer_artifact=model_trainer_artifact,
+                data_transformation_artifacts=data_transformation_artifact
+                  
             )
 
             model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
