@@ -46,7 +46,7 @@ class DataTransformation:
             raw_data = pd.read_csv(self.data_ingestion_artifact.raw_data_file_path)
             raw_data.drop(self.data_transformation_config.DROP_COLUMNS, axis=self.data_transformation_config.AXIS, inplace=self.data_transformation_config.INPLACE)
 
-            raw_data[raw_data[self.data_transformation_config.CLASS]==0][self.data_transformation_config.CLASS]=1
+            raw_data.loc[raw_data[self.data_transformation_config.CLASS] == 0, self.data_transformation_config.CLASS] = 1
 
             # replace the value of 0 to 1
             raw_data[self.data_transformation_config.CLASS].replace({0:1},inplace=True)

@@ -74,3 +74,4 @@ MAX_LEN = 300
 LOSS = 'binary_crossentropy'
 METRICS = ['accuracy']
 ACTIVATION = 'sigmoid'
+TOKENIZER_DIR = 'tokenizer'

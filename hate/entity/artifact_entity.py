@@ -27,3 +27,6 @@ class ModelTrainerArtifact:
     trained_model_path:str 
     x_test_path: list
     y_test_path: list 
+
+
+
