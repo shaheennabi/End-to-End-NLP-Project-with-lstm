@@ -74,7 +74,7 @@ class S3Client:
         
 
 
-    def model_exists_in_s3(bucket_name: str, model_key: str) -> bool:
+    def model_exists_in_s3(self, bucket_name, model_key) -> bool:
         s3 = boto3.client('s3')
         try:
             s3.head_object(Bucket=bucket_name, Key=model_key)
