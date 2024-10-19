@@ -1,6 +1,7 @@
 import boto3
 import os
 import logging
+from botocore.exceptions import NoCredentialsError, ClientError
 
 class S3Client:
     s3_client = None
@@ -70,3 +71,16 @@ class S3Client:
             raise Exception(f"Error uploading file to S3: {str(e)}")
         except Exception as e:
             raise Exception(f"An unexpected error occurred: {str(e)}")
+        
+
+
+    def model_exists_in_s3(bucket_name: str, model_key: str) -> bool:
+        s3 = boto3.client('s3')
+        try:
+            s3.head_object(Bucket=bucket_name, Key=model_key)
+            return True
+        except ClientError as e:
+            if e.response['Error']['Code'] == '404':
+                return False
+            else:
+                raise

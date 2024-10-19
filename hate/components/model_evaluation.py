@@ -129,27 +129,31 @@ class ModelEvaluation:
             # Evaluate the trained model
             trained_model_accuracy = self.evaluate()
 
-            logging.info("Fetching best model from S3 storage")
-            best_model_path = self.get_best_model_from_s3()
+            logging.info("Checking if best model exists in S3 storage")
+            s3_bucket_name = self.model_evaluation_config.BUCKET_NAME
+            s3_model_key = self.model_evaluation_config.MODEL_NAME
 
-            logging.info("Check is best model present in the s3 storage or not ?")
-            if os.path.isfile(best_model_path) is False:
+            # Check if the model exists in S3
+            if not self.s3.model_exists_in_s3(s3_bucket_name, s3_model_key):
+                logging.info("No model found in S3. Accepting trained model as best model.")
                 is_model_accepted = True
-                logging.info("s3 storage model is false and currently trained model accepted is true")
-
             else:
-                logging.info("Load best model fetched from s3 storage")
-                best_model=keras.models.load_model(best_model_path)
-                best_model_accuracy= self.evaluate()
-
-                logging.info("Comparing loss between best_model_loss and trained_model_loss ? ")
+                logging.info("Best model exists in S3. Downloading and evaluating.")
+                # Download the model from S3 to a local path
+                local_best_model_path = self.model_evaluation_config.BEST_MODEL_DIR_PATH
+                self.get_best_model_from_s3(s3_bucket_name, s3_model_key, local_best_model_path)
                 
+                best_model = keras.models.load_model(local_best_model_path)
+                best_model_accuracy = self.evaluate()
+
+                logging.info("Comparing best model and trained model accuracies")
                 if best_model_accuracy > trained_model_accuracy:
-                    is_model_accepted = True
-                    logging.info("Trained model not accepted")
-                else:
                     is_model_accepted = False
-                    logging.info("Trained model accepted")
+                    logging.info("Trained model rejected. Best model in S3 is better.")
+                else:
+                    is_model_accepted = True
+                    logging.info("Trained model accepted. It is better than the best model in S3.")
+
             model_evaluation_artifact = ModelEvaluationArtifact(is_model_accepted=is_model_accepted)
             logging.info("Returning the ModelEvaluationArtifact")
             return model_evaluation_artifact

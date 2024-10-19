@@ -132,7 +132,8 @@ class TrainPipeline:
             if not model_evaluation_artifact.is_model_accepted:
                 raise Exception("Trained model is not better than the best model")
             else: 
-                model_pusher_artifact = self.start_model_pusher()
+                logging.info("Pushing trained model to S3")
+                model_pusher_artifact = self.start_model_pusher()  # Push the trained model to S3
                 logging.info(f"Model pusher artifact: {model_pusher_artifact}")
 
             logging.info("Pipeline completed successfully")
