@@ -73,13 +73,16 @@ class ModelTrainerConfig:
 
 
 
+
 @dataclass
 class ModelEvaluationConfig: 
     def __init__(self):
-        self.MODEL_EVALUATION_MODEL_DIR: str = os.path.join(os.getcwd(),ARTIFACTS_DIR, MODEL_EVALUATION_ARTIFACTS_DIR)
-        self.BEST_MODEL_DIR_PATH: str = os.path.join(self.MODEL_EVALUATION_MODEL_DIR,BEST_MODEL_DIR)
+        self.MODEL_EVALUATION_MODEL_DIR: str = os.path.join(os.getcwd(), ARTIFACTS_DIR, MODEL_EVALUATION_ARTIFACTS_DIR)
+        self.BEST_MODEL_DIR_PATH: str = os.path.join(self.MODEL_EVALUATION_MODEL_DIR, BEST_MODEL_DIR)
+        self.MODEL_NAME = MODEL_NAME  
+        self.BEST_MODEL_DIR_PATH_WITH_MODEL_NAME: str = os.path.join(self.BEST_MODEL_DIR_PATH, self.MODEL_NAME)
         self.BUCKET_NAME = BUCKET_NAME 
-        self.MODEL_NAME = MODEL_NAME 
+
 
 
 

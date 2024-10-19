@@ -120,6 +120,7 @@ class ModelEvaluation:
 
             # Evaluate the trained model
             trained_model_accuracy = self.evaluate()
+            logging.info(f"Trained model accuracy: {trained_model_accuracy}")
 
             logging.info("Checking if best model exists in S3 storage")
             s3_bucket_name = self.model_evaluation_config.BUCKET_NAME
@@ -132,11 +133,12 @@ class ModelEvaluation:
             else:
                 logging.info("Best model exists in S3. Downloading and evaluating.")
                 # Download the model from S3 to a local path
-                local_best_model_path = self.model_evaluation_config.BEST_MODEL_DIR_PATH
+                local_best_model_path = self.model_evaluation_config.BEST_MODEL_DIR_PATH_WITH_MODEL_NAME
                 self.get_best_model_from_s3(s3_bucket_name, s3_model_key, local_best_model_path)
 
                 best_model = keras.models.load_model(local_best_model_path)
                 best_model_accuracy = self.evaluate()
+                logging.info(f"Best model accuracy: {best_model_accuracy}")
 
                 logging.info("Comparing best model and trained model accuracies")
                 if best_model_accuracy > trained_model_accuracy:
