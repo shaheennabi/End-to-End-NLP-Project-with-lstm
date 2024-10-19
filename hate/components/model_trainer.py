@@ -87,20 +87,19 @@ class ModelTrainer:
                       validation_split=self.model_trainer_config.VALIDATION_SPLIT)
             logging.info("Model training finished")
 
-            # Save the tokenizer to the specified directory
-            os.makedirs(self.model_trainer_config.TOKENIZER_DIR, exist_ok=True)
-            tokenizer_path = os.path.join(self.model_trainer_config.TOKENIZER_DIR, 'tokenizer.pickle')
-            with open(tokenizer_path, 'wb') as handle:
+          
+
+            logging.info("Saving the tokenizer")
+
+            with open('tokenizer.pickle', 'wb') as handle:
                 pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            os.makedirs(self.model_trainer_config.TRAINED_MODEL_DIR,exist_ok=True)
 
+            logging.info(f"Saved the tokenizer at :{self.model_trainer_config.TRAINED_MODEL_DIR}")           
 
-            # Create directories and save the model
-            os.makedirs(self.model_trainer_config.TRAINED_MODEL_DIR, exist_ok=True)
-            trained_model_path = os.path.join(self.model_trainer_config.TRAINED_MODEL_PATH, 'model.h5')
-            logging.info("Saving the model")
-            model.save(trained_model_path)
-
-              
+            logging.info("saving the model")
+            model.save(self.model_trainer_config.TRAINED_MODEL_PATH)
+            logging.info("Saved the model")
 
             # Save train and test data
             pd.DataFrame(x_train).to_csv(self.model_trainer_config.X_TRAIN_DATA_PATH, index=False)
@@ -109,7 +108,7 @@ class ModelTrainer:
 
             # Return the model trainer artifacts
             model_trainer_artifacts = ModelTrainerArtifact(
-                trained_model_path=trained_model_path,
+                trained_model_path= self.model_trainer_config.TRAINED_MODEL_PATH,
                 x_test_path=self.model_trainer_config.X_TEST_DATA_PATH,
                 y_test_path=self.model_trainer_config.Y_TEST_DATA_PATH
             )

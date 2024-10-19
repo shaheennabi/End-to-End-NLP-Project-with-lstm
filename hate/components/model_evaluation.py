@@ -11,19 +11,17 @@ from hate.constants import *
 from hate.configuration.s3_syncer import S3Client
 from sklearn.metrics import confusion_matrix
 from hate.entity.config_entity import ModelEvaluationConfig
-from hate.entity.artifact_entity import ModelEvaluationArtifact, ModelTrainerArtifact, DataTransformationArtifact
+from hate.entity.artifact_entity import ModelEvaluationArtifact, ModelTrainerArtifact
 
 
 class ModelEvaluation:
-    def __init__(self, model_evaluation_config: ModelEvaluationConfig, model_trainer_artifact: ModelTrainerArtifact, data_transformation_artifact: DataTransformationArtifact):
+    def __init__(self, model_evaluation_config: ModelEvaluationConfig, model_trainer_artifact: ModelTrainerArtifact):
         """
         :param model_evaluation_config: Configuration for model evaluation.
         :param model_trainer_artifacts: Output reference of model trainer artifact stage.
-        :param data_transformation_artifacts: Reference to data transformation stage.
         """
         self.model_evaluation_config = model_evaluation_config
         self.model_trainer_artifact = model_trainer_artifact
-        self.data_transformation_artifacts = data_transformation_artifact
         self.s3 = S3Client()
 
     def get_best_model_from_s3(self) -> str:
@@ -58,25 +56,49 @@ class ModelEvaluation:
         try:
             logging.info("Entering the evaluate function of Model Evaluation class")
 
-            # Load test data
-            x_test = pd.read_csv(self.model_trainer_artifact.x_test_path, index_col=0)
-            y_test = pd.read_csv(self.model_trainer_artifact.y_test_path, index_col=0)
+           # Load test data
+            logging.info("Loading test data")
+            x_test = pd.read_csv(self.model_trainer_artifact.x_test_path, header=0)
+            y_test = pd.read_csv(self.model_trainer_artifact.y_test_path, header=0)
+
 
             # Load tokenizer
-            with open('../../tokenizer/tokenizer.pickle', 'rb') as handle:  # Update the path as necessary
+            logging.info("Entering tokenizer loading")
+            with open('C:/Users/mailm/downloads/projects/End-to-End-NLP-Project-with-lstm/tokenizer/tokenizer.pickle', 'rb') as handle: 
                 tokenizer = pickle.load(handle)
+            logging.info("Exiting loading tokenizer process")
 
             # Load trained model
             load_model = keras.models.load_model(self.model_trainer_artifact.trained_model_path)
 
             # Preprocess test data
-            x_test = x_test['tweet'].astype(str).squeeze()
-            y_test = y_test.squeeze()
+            logging.info("Preprocessing test data")
+            print(x_test.columns)  # Check the column names
 
+            x_test = x_test['tweet'].tolist()  
+            x_test = [str(text) for text in x_test]
+
+
+            # Convert x_test to strings
+            x_test = [str(text) for text in x_test]
+            logging.info(f"x_test converted to strings: {x_test[:5]}")  # Log first 5 for verification
+            
+            # Ensure y_test is a single-column DataFrame
+            if y_test.shape[1] == 1:  # Check if there is only one column
+                y_test = y_test.squeeze()  # Convert to Series
+            else:
+                logging.error("y_test has more than one column, which is unexpected.")
+                raise ValueError("y_test should have a single column for labels.")
+
+            # Check the shape and contents of y_test
+            logging.info(f"y_test shape: {y_test.shape}, sample: {y_test.head()}")
+
+            logging.info("Converting x_test to sequences")
             # Convert to sequences
             test_sequences = tokenizer.texts_to_sequences(x_test)
             test_sequences_matrix = pad_sequences(test_sequences, maxlen=MAX_LEN)
 
+            logging.info("Starting model evaluation")
             # Evaluate model
             loss, accuracy = load_model.evaluate(test_sequences_matrix, y_test)
             logging.info(f"The test accuracy is {accuracy}")
@@ -99,7 +121,7 @@ class ModelEvaluation:
 
         :return: Returns model evaluation artifact.
         """
-        logging.info("Initiate Model Evaluation")
+        logging.info("Initiating Model Evaluation")
         try:
             logging.info("Loading currently trained model")
             trained_model = keras.models.load_model(self.model_trainer_artifact.trained_model_path)
@@ -107,28 +129,27 @@ class ModelEvaluation:
             # Evaluate the trained model
             trained_model_accuracy = self.evaluate()
 
-            logging.info("Fetch best model from S3 storage")
+            logging.info("Fetching best model from S3 storage")
             best_model_path = self.get_best_model_from_s3()
 
-            logging.info("Check if the best model is present in the S3 storage or not")
-            if not os.path.isfile(best_model_path):
+            logging.info("Check is best model present in the s3 storage or not ?")
+            if os.path.isfile(best_model_path) is False:
                 is_model_accepted = True
-                logging.info("Best model not found in S3; trained model accepted.")
-            else:
-                logging.info("Load best model fetched from S3 storage")
-                best_model = keras.models.load_model(best_model_path)
-                
-                # Evaluate best model
-                best_model_accuracy = self.evaluate()
+                logging.info("s3 storage model is false and currently trained model accepted is true")
 
-                logging.info("Comparing accuracy between best_model_accuracy and trained_model_accuracy")
-                if trained_model_accuracy > best_model_accuracy:
+            else:
+                logging.info("Load best model fetched from s3 storage")
+                best_model=keras.models.load_model(best_model_path)
+                best_model_accuracy= self.evaluate()
+
+                logging.info("Comparing loss between best_model_loss and trained_model_loss ? ")
+                
+                if best_model_accuracy > trained_model_accuracy:
                     is_model_accepted = True
-                    logging.info("Trained model has better accuracy; it is accepted.")
+                    logging.info("Trained model not accepted")
                 else:
                     is_model_accepted = False
-                    logging.info("Best model has better accuracy; trained model not accepted.")
-
+                    logging.info("Trained model accepted")
             model_evaluation_artifact = ModelEvaluationArtifact(is_model_accepted=is_model_accepted)
             logging.info("Returning the ModelEvaluationArtifact")
             return model_evaluation_artifact

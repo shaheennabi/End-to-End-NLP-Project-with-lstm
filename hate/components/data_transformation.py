@@ -131,6 +131,10 @@ class DataTransformation:
                 self.raw_data_cleaning()
                 df = self.concat_dataframe()
 
+                df.columns = df.columns.str.strip().str.lower()
+                # Log the DataFrame structure for debugging
+                logging.info(f"DataFrame columns: {df.columns.tolist()}")
+                logging.info(f"DataFrame head:\n{df.head()}")
                 # Apply the cleaning function to the TWEET column
                 df[self.data_transformation_config.TWEET] = df[self.data_transformation_config.TWEET].apply(self.concat_data_cleaning)
 

@@ -87,13 +87,12 @@ class TrainPipeline:
         except Exception as e:
             raise HateException(e, sys)
 
-    def start_model_evaluation(self, model_trainer_artifact: ModelTrainerArtifact, data_transformation_artifact: DataTransformationArtifact) -> ModelEvaluationArtifact:
+    def start_model_evaluation(self, model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifact:
         logging.info("Entered the start_model_evaluation method of TrainPipeline class")
         try: 
             model_evaluation = ModelEvaluation(
                 model_evaluation_config=self.model_evaluation_config,
                 model_trainer_artifact=model_trainer_artifact,
-                data_transformation_artifacts=data_transformation_artifact
                   
             )
 
@@ -127,8 +126,7 @@ class TrainPipeline:
             )
             model_trainer_artifact = self.start_model_trainer(data_transformation_artifacts=data_transformation_artifact)
             model_evaluation_artifact = self.start_model_evaluation(
-                model_trainer_artifact=model_trainer_artifact, 
-                data_transformation_artifact=data_transformation_artifact
+                model_trainer_artifact=model_trainer_artifact
             )
 
             if not model_evaluation_artifact.is_model_accepted:
