@@ -13,6 +13,92 @@ In this project, I tackled the challenge of detecting hate speech using an LSTM-
 Combined two datasets to address imbalance issues.
 Applied text preprocessing steps such as tokenization, lowercasing, and removal of stopwords.
 
+
+
+# Project Tree Structure
+``` bash
+
+.
+├── END-TO-END-NLP-PROJECT-WITH-LSTM
+├── .circleci/
+│   └── config.yml
+├── artifact/
+│   ├── 10_05_2024_03_23_14 (or time Stamp)/
+│   │   ├── DataIngestionArtifacts/
+│   │   │   ├── dataset.zip
+│   │   │   ├── imbalanced_data.csv
+│   │   │   └── raw_data.csv
+│   │   ├── DataValidationArtifacts/
+│   │   │   └── status.txt
+│   │   ├── DataTransformationArtifacts/
+│   │   │   └── final.csv
+│   │   ├── ModelTrainerArtifacts/
+│   │   │   ├── model.h5
+│   │   │   ├── x_test.csv
+│   │   │   ├── x_train.csv
+│   │   │   └── y_test.csv        
+│   │   └── ModelEvaluationArtifacts    /
+│   │       └── best_model/
+│   │           └── model.h5
+│   └── PredicModel /
+│       └── model.h5  
+├── data/
+│   └── dataset.zip
+├── Hate or src/
+│   ├── components/
+│   │   ├── __pychache__/
+│   │   ├── __init__.py
+│   │   ├── data_ingestion.py
+│   │   ├── data_validation.py
+│   │   ├── data_transformation.py
+│   │   ├── model_evaluation.py
+│   │   ├── model_pusher.py
+│   │   └── model_trainer.py
+│   ├── configuration/
+│   │   ├── __pycache__
+│   │   ├── __init__.py
+│   │   └── s3_syncer.py
+│   ├── constants/
+│   │   ├── __pycache__/
+│   │   └── __init__.py
+│   ├── entity/
+│   │   ├── __pycache__/
+│   │   ├── __init__.py
+│   │   ├── artifact_entity.py
+│   │   └── config_entity.py
+│   ├── exception/
+│   │   ├── __pycache__/
+│   │   └── __init__.py
+│   ├── logger/
+│   │   ├── __pycache__/
+│   │   └── __init__py
+│   ├── ml/
+│   │   ├── __init__.py
+│   │   └── model.py
+│   └── pipeline/
+│       ├── __pycache__/
+│       ├── __init__.py
+│       ├── training_pipeline.py
+│       └── prediction_pipeline.py
+├── logs/
+│   └── 10_05_2024_03_23_14.log/
+│       └── 10_05_2024_03_23_14.log
+├── Notebook/
+│   └── Hate_speech_experiment.ipynb
+├── s3_downloads/
+│   └── dataset.zip
+├── app.py
+├── circleci_setup_template.sh
+├── Dockerfile
+├── README.md
+├── requirements.txt
+├── setup.py
+└── template.py
+
+```
+
+
+
 ## How to run?
 ``` bash
 conda create -n hate python=3.8 -y
