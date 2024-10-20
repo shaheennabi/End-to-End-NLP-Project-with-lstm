@@ -21,27 +21,27 @@ jobs:
           push-image: true
           region: 'us-east-1'
           repo: hate
-          registry-id: '445567117176'
+          registry-id: 
           repo-scan-on-push: true
           tag: latest
 
   continuous-delivery:
     machine: true
-    resource_class: shaheen/hate2
+    resource_class: 
     steps:
       - aws-cli/setup
 
       - run:
           name: auth to aws ecr
-          command: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 445567117176.dkr.ecr.us-east-1.amazonaws.com
+          command: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin
 
       - run:
           name: pull image from private repository
-          command: docker pull 445567117176.dkr.ecr.us-east-1.amazonaws.com/hate
+          command: docker pull 
       
       - run:
           name: run image
-          command: docker run -d -p 8080:8080 445567117176.dkr.ecr.us-east-1.amazonaws.com/hate
+          command: docker run -d -p 8080:8080 
 
 workflows:
   CICD:
