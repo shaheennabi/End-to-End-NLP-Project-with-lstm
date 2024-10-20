@@ -36,3 +36,13 @@ After creating project template
  * Update respective component
  * Update pipeline
  
+
+
+## Deployment
+
+1. Setting up circleCI
+2. Switch on self hosted runner
+3. Create Project
+4. Configure EC2
+5. config.yml
+6. env variables
