@@ -1,4 +1,4 @@
-🎆🎉 # End-to-End-NLP-Project-with-RNN 🎉🎆
+# 🎆🎉  End-to-End-NLP-Project-with-RNN 🎉🎆
 
 This project aims to classify hate speech using a deep learning model. The dataset for this project was sourced from Kaggle and underwent significant preprocessing to ensure a balanced and clean training set.
 
