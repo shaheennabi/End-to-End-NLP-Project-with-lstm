@@ -126,24 +126,23 @@ export AWS_DEFAULT_REGION="e.g, us-east-1"
 
 
 
+🎆🎉 # Workflow 🎉🎆
 
-# Workflow
-After creating project template
- * Update constants 
- * Update Entiry modules
- * Update respective component
- * Update pipeline
- 
+After creating the project template:
+ * 🔥 Update constants 
+ * 🔥 Update Entity modules
+ * 🔥 Update respective component
+ * 🔥 Update pipeline
 
 
-## Deployment
+## 🎆 Deployment 🎆
 
-1. Setting up circleCI
-2. Switch on self hosted runner
-3. Create Project
-4. Configure EC2
-5. config.yml
-6. env variables
+1. Setting up CircleCI 🎉
+2. Switching on self-hosted runner 💥
+3. Creating Project 🎊
+4. Configuring EC2 🚀
+5. Writing `config.yml` 📜
+6. Setting environment variables 🔒
 
 
 
