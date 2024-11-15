@@ -15,7 +15,7 @@ In this project, I tackled the challenge of detecting hate speech using an LSTM-
 
 
 
-# Project Tree Structure
+# 🎉 Project Tree Structure 🎉
 ``` bash
 
 .
